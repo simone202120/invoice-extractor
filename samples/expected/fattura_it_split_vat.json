@@ -1,0 +1,52 @@
+{
+  "document_type": "invoice",
+  "number": "2026/087",
+  "issue_date": "2026-02-05",
+  "currency": "EUR",
+  "supplier": {
+    "name": "Forniture Alimentari Esempio S.r.l.",
+    "vat_number": "01234567897",
+    "address": "Via dei Mille 12, 40121 Bologna (BO)",
+    "country": "IT"
+  },
+  "customer": {
+    "name": "Ristorante Il Glicine Immaginario S.n.c.",
+    "vat_number": "12345678903",
+    "address": "Via Roma 5, 50123 Firenze (FI)",
+    "country": "IT"
+  },
+  "line_items": [
+    {
+      "description": "Tovaglioli in carta 40x40 (conf. 500 pz)",
+      "quantity": "5",
+      "unit_price": "12.60",
+      "vat_rate": "22",
+      "line_total": "63.00"
+    },
+    {
+      "description": "Detergente lavastoviglie 10 L",
+      "quantity": "3",
+      "unit_price": "24.90",
+      "vat_rate": "22",
+      "line_total": "74.70"
+    },
+    {
+      "description": "Passata di pomodoro 700 g (cartone 12 pz)",
+      "quantity": "8",
+      "unit_price": "14.25",
+      "vat_rate": "10",
+      "line_total": "114.00"
+    },
+    {
+      "description": "Mozzarella fior di latte 1 kg",
+      "quantity": "12",
+      "unit_price": "7.85",
+      "vat_rate": "10",
+      "line_total": "94.20"
+    }
+  ],
+  "net_total": "345.90",
+  "vat_total": "51.11",
+  "gross_total": "397.01",
+  "payment_terms": "Bonifico bancario 30 gg data fattura"
+}

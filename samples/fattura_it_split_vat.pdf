@@ -1,0 +1,61 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 1135 >>
+stream
+BT
+/F1 9 Tf
+11 TL
+40 800 Td
+(FORNITURE ALIMENTARI ESEMPIO S.R.L.) Tj T*
+(Via dei Mille 12 - 40121 Bologna \(BO\)) Tj T*
+(P.IVA 01234567897) Tj T*
+() Tj T*
+(FATTURA n. 2026/087 del 05/02/2026) Tj T*
+() Tj T*
+(Cliente: Ristorante Il Glicine Immaginario S.n.c.) Tj T*
+(Via Roma 5 - 50123 Firenze \(FI\) - P.IVA 12345678903) Tj T*
+() Tj T*
+(Descrizione                                  Q.ta   Prezzo    Importo   IVA) Tj T*
+(Tovaglioli in carta 40x40 \(conf. 500 pz\)       5    12,60      63,00   22%) Tj T*
+(Detergente lavastoviglie 10 L                  3    24,90      74,70   22%) Tj T*
+(Passata di pomodoro 700 g \(cartone 12 pz\)      8    14,25     114,00   10%) Tj T*
+(Mozzarella fior di latte 1 kg                 12     7,85      94,20   10%) Tj T*
+() Tj T*
+(Riepilogo IVA) Tj T*
+(Aliquota 22%   Imponibile 137,70   Imposta 30,29) Tj T*
+(Aliquota 10%   Imponibile 208,20   Imposta 20,82) Tj T*
+() Tj T*
+(Totale imponibile     345,90) Tj T*
+(Totale IVA             51,11) Tj T*
+(TOTALE FATTURA EUR    397,01) Tj T*
+() Tj T*
+(Pagamento: bonifico bancario 30 gg data fattura) Tj T*
+(Documento di esempio con dati fittizi.) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001428 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R /Info << /Producer (invoice-extractor samples) >> >>
+startxref
+1523
+%%EOF

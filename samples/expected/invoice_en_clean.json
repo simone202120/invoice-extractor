@@ -1,0 +1,45 @@
+{
+  "document_type": "invoice",
+  "number": "NDS-2026-0142",
+  "issue_date": "2026-03-12",
+  "currency": "GBP",
+  "supplier": {
+    "name": "Northwind Design Studio Ltd",
+    "vat_number": "GB 123 4567 89",
+    "address": "14 Harbour Lane, Bristol BS1 4XY, United Kingdom",
+    "country": "GB"
+  },
+  "customer": {
+    "name": "Bluefin Analytics Ltd",
+    "vat_number": null,
+    "address": "Unit 7, Riverside Park, Leeds LS10 1AB, United Kingdom",
+    "country": "GB"
+  },
+  "line_items": [
+    {
+      "description": "Brand identity workshop (half day)",
+      "quantity": "1",
+      "unit_price": "650.00",
+      "vat_rate": "20",
+      "line_total": "650.00"
+    },
+    {
+      "description": "Logo design - 3 concepts",
+      "quantity": "1",
+      "unit_price": "1200.00",
+      "vat_rate": "20",
+      "line_total": "1200.00"
+    },
+    {
+      "description": "Business card layout",
+      "quantity": "2",
+      "unit_price": "85.00",
+      "vat_rate": "20",
+      "line_total": "170.00"
+    }
+  ],
+  "net_total": "2020.00",
+  "vat_total": "404.00",
+  "gross_total": "2424.00",
+  "payment_terms": "30 days from invoice date"
+}
