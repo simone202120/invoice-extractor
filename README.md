@@ -3,6 +3,8 @@
 LangChain pipeline that turns invoices and receipts (PDF or text) into validated, structured JSON,
 with consistency checks and self-correcting retries.
 
+![Italian invoice with two VAT rates extracted, validated and shown next to the source text](docs/images/invoice-result.png)
+
 ## Features
 
 - Accepts PDF or plain text, as an uploaded file or raw JSON text.

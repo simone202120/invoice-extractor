@@ -6,7 +6,7 @@ from decimal import Decimal, InvalidOperation
 from enum import StrEnum
 from typing import Annotated
 
-from pydantic import BaseModel, BeforeValidator, Field, WithJsonSchema
+from pydantic import AfterValidator, BaseModel, BeforeValidator, Field, WithJsonSchema
 
 _NON_NUMERIC = re.compile(r"[^\d.,-]")
 
@@ -35,6 +35,15 @@ def parse_decimal(value: object) -> Decimal:
 
 def _upper(value: object) -> object:
     return value.strip().upper() if isinstance(value, str) else value
+
+
+MAX_LINE_ITEMS = 500
+
+
+def _cap_line_items(items: list["LineItem"]) -> list["LineItem"]:
+    if len(items) > MAX_LINE_ITEMS:
+        raise ValueError(f"at most {MAX_LINE_ITEMS} line items are supported")
+    return items
 
 
 # Upper bounds on model output, independent of the document size limit.
@@ -79,7 +88,9 @@ class Invoice(BaseModel):
     )
     supplier: Party
     customer: Party | None = None
-    line_items: list[LineItem] = Field(max_length=500)
+    # Capped by a validator rather than `max_length`: a `maxItems` in the JSON schema makes
+    # Gemini reject forced tool calls with "Request contains an invalid argument".
+    line_items: Annotated[list[LineItem], AfterValidator(_cap_line_items)]
     net_total: Money = Field(description="Total excluding VAT.")
     vat_total: Money = Field(description="Total VAT amount.")
     gross_total: Money = Field(description="Total amount due including VAT.")
