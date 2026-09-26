@@ -31,7 +31,8 @@ flowchart LR
 
 1. **Load** (`core/loader.py`). PDFs are recognised by their `%PDF-` header, not the file name, and
    read with `pypdf`. Text files must be UTF-8. Empty files, oversized files (`MAX_UPLOAD_MB`),
-   too-long text (`MAX_TEXT_CHARS`), corrupt or encrypted PDFs and PDFs without a text layer are
+   too many PDF pages (`MAX_PDF_PAGES`, checked before text extraction), too-long text
+   (`MAX_TEXT_CHARS`), corrupt or encrypted PDFs and PDFs without a text layer are
    rejected with domain errors.
 2. **Extract** (`core/extraction.py`). The injected extractor is a chat model wrapped with
    `with_structured_output(Invoice, include_raw=True)`. The prompt covers Italian and English
