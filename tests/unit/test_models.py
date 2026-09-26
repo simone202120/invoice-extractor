@@ -4,7 +4,7 @@ from decimal import Decimal
 import pytest
 from pydantic import ValidationError
 
-from invoice_extractor.core.models import DocumentType, Invoice, parse_decimal
+from invoice_extractor.core.models import MAX_LINE_ITEMS, DocumentType, Invoice, parse_decimal
 
 
 @pytest.mark.parametrize(
@@ -77,3 +77,15 @@ def test_invoice_rejects_oversized_llm_output() -> None:
     payload = _invoice_payload() | {"number": "x" * 101}
     with pytest.raises(ValidationError):
         Invoice.model_validate(payload)
+
+
+def test_invoice_rejects_too_many_line_items() -> None:
+    items = _invoice_payload()["line_items"]
+    assert isinstance(items, list)
+    payload = _invoice_payload() | {"line_items": items * (MAX_LINE_ITEMS + 1)}
+    with pytest.raises(ValidationError, match="line items"):
+        Invoice.model_validate(payload)
+
+
+def test_invoice_schema_has_no_max_items_so_gemini_accepts_it() -> None:
+    assert "maxItems" not in str(Invoice.model_json_schema())
