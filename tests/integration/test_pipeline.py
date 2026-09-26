@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+from invoice_extractor.config import Settings
 from invoice_extractor.core.extraction import extract_invoice
 from invoice_extractor.core.loader import load_document
 from invoice_extractor.core.models import Invoice
@@ -16,7 +17,13 @@ INCONSISTENT_SAMPLES = {"invoice_arithmetic_error"}
 
 
 def _load(path: Path) -> str:
-    return load_document(path.read_bytes(), path.name, max_bytes=10_000_000, max_chars=50_000)
+    settings = Settings(_env_file=None)
+    return load_document(
+        path.read_bytes(),
+        path.name,
+        max_bytes=settings.max_upload_mb * 1024 * 1024,
+        max_chars=settings.max_text_chars,
+    )
 
 
 def test_every_sample_has_expected_json() -> None:
