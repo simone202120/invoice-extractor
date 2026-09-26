@@ -88,6 +88,16 @@ class ValidationReport(BaseModel):
     retries: int
 
 
+class RunUsage(BaseModel):
+    """Cost and speed of one extraction, summed over all attempts."""
+
+    input_tokens: int = 0
+    output_tokens: int = 0
+    cost_usd: float | None = None
+    latency_ms: int = 0
+
+
 class ExtractionResult(BaseModel):
     invoice: Invoice
     validation: ValidationReport
+    usage: RunUsage

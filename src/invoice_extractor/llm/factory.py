@@ -17,6 +17,8 @@ def create_extractor(settings: Settings) -> Extractor:
         base_url=settings.openrouter_base_url,
         temperature=0,
         timeout=settings.llm_timeout_seconds,
+        # Asks OpenRouter to include the billed cost in the usage block of each response.
+        extra_body={"usage": {"include": True}},
     )
     # Function calling is the structured-output mode most widely supported across OpenRouter
     # models; include_raw keeps parsing errors so they can be fed back to the model.
