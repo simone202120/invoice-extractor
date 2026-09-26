@@ -31,6 +31,17 @@ jobs:
       - run: uv run pytest -m "not llm" --cov --cov-report=term-missing --cov-report=xml
 
 
+  docker-build:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - if: hashFiles('Dockerfile') != ''
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [quality, test]
@@ -49,5 +60,6 @@ jobs:
       - if: hashFiles('Dockerfile') != ''
         uses: docker/build-push-action@v6
         with:
+          context: .
           push: true
           tags: ghcr.io/${{ github.repository }}:latest,ghcr.io/${{ github.repository }}:${{ github.sha }}

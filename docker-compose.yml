@@ -1,0 +1,45 @@
+services:
+  api:
+    build: .
+    image: invoice-extractor
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://localhost:8000/health')
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  ui:
+    build: .
+    image: invoice-extractor
+    command:
+      - streamlit
+      - run
+      - src/invoice_extractor/ui/app.py
+      - --server.address=0.0.0.0
+      - --server.port=8501
+      - --server.headless=true
+    environment:
+      API_URL: http://api:8000
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health')
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    ports:
+      - "8501:8501"
+    depends_on:
+      api:
+        condition: service_healthy

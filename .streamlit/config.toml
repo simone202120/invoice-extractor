@@ -1,0 +1,18 @@
+[theme]
+base = "light"
+primaryColor = "#0E8A5F"
+backgroundColor = "#F6F8F7"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#17211B"
+font = "sans-serif"
+baseRadius = "medium"
+
+[client]
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false
+
+[server]
+# Matches the API default (MAX_UPLOAD_MB); the API enforces the real limit.
+maxUploadSize = 10

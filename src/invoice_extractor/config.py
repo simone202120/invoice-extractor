@@ -1,6 +1,7 @@
 """Application settings loaded from environment variables (and `.env` in local development)."""
 
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -23,6 +24,10 @@ class Settings(BaseSettings):
     max_batch_files: int = Field(default=20, ge=1)
     batch_concurrency: int = Field(default=4, ge=1)
     llm_timeout_seconds: float = 60
+
+    api_url: str = "http://localhost:8000"
+    api_timeout_seconds: float = 300
+    samples_dir: Path = Path("samples")
 
     @property
     def max_upload_bytes(self) -> int:
