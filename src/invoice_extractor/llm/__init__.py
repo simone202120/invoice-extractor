@@ -1,1 +1,1 @@
-"""LLM access: prompts and the model factory."""
+"""LLM access: prompt templates."""

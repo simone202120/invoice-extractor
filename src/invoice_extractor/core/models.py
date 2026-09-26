@@ -60,7 +60,7 @@ class Party(BaseModel):
 
 class LineItem(BaseModel):
     description: str
-    quantity: Money = Field(description="Quantity; 1 when not printed.")
+    quantity: Money = Field(default=Decimal(1), description="Quantity; 1 when not printed.")
     unit_price: Money = Field(description="Unit price excluding VAT.")
     vat_rate: Money = Field(description="VAT rate in percent, e.g. 22 for 22%.")
     line_total: Money = Field(description="Line amount excluding VAT, as printed.")
