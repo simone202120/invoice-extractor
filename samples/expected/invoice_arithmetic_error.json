@@ -1,0 +1,38 @@
+{
+  "document_type": "invoice",
+  "number": "2026-117",
+  "issue_date": "2026-05-20",
+  "currency": "EUR",
+  "supplier": {
+    "name": "Tulip Lane Consulting B.V.",
+    "vat_number": "NL000000000B01",
+    "address": "Keizersgracht 999, 1015 AA Amsterdam, The Netherlands",
+    "country": "NL"
+  },
+  "customer": {
+    "name": "Harbourlight Retail B.V.",
+    "vat_number": null,
+    "address": "Stationsplein 1, 3511 AA Utrecht, The Netherlands",
+    "country": "NL"
+  },
+  "line_items": [
+    {
+      "description": "Data quality audit",
+      "quantity": "3",
+      "unit_price": "450.00",
+      "vat_rate": "21",
+      "line_total": "1400.00"
+    },
+    {
+      "description": "Findings report writing",
+      "quantity": "8",
+      "unit_price": "95.00",
+      "vat_rate": "21",
+      "line_total": "760.00"
+    }
+  ],
+  "net_total": "2160.00",
+  "vat_total": "453.60",
+  "gross_total": "2613.60",
+  "payment_terms": "Please pay within 14 days"
+}

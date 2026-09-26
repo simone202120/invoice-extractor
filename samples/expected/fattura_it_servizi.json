@@ -1,0 +1,45 @@
+{
+  "document_type": "invoice",
+  "number": "31/2026",
+  "issue_date": "2026-01-28",
+  "currency": "EUR",
+  "supplier": {
+    "name": "Rete Digitale Fittizia S.r.l.",
+    "vat_number": "05551234569",
+    "address": "Corso Vittorio Emanuele 101, 10121 Torino (TO)",
+    "country": "IT"
+  },
+  "customer": {
+    "name": "Panificio Aurora S.a.s.",
+    "vat_number": "03219876541",
+    "address": "Via Garibaldi 8, 37121 Verona (VR)",
+    "country": "IT"
+  },
+  "line_items": [
+    {
+      "description": "Sviluppo sito web vetrina",
+      "quantity": "1",
+      "unit_price": "1500.00",
+      "vat_rate": "22",
+      "line_total": "1500.00"
+    },
+    {
+      "description": "Hosting annuale",
+      "quantity": "1",
+      "unit_price": "180.00",
+      "vat_rate": "22",
+      "line_total": "180.00"
+    },
+    {
+      "description": "Manutenzione mensile",
+      "quantity": "6",
+      "unit_price": "45.50",
+      "vat_rate": "22",
+      "line_total": "273.00"
+    }
+  ],
+  "net_total": "1953.00",
+  "vat_total": "429.66",
+  "gross_total": "2382.66",
+  "payment_terms": "Bonifico bancario a 60 gg fine mese"
+}

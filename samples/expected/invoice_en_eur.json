@@ -1,0 +1,45 @@
+{
+  "document_type": "invoice",
+  "number": "KM-26-0419",
+  "issue_date": "2026-02-17",
+  "currency": "EUR",
+  "supplier": {
+    "name": "Kranich Maschinenbau GmbH",
+    "vat_number": "DE000000000",
+    "address": "Industriestrasse 9, 70173 Stuttgart, Germany",
+    "country": "DE"
+  },
+  "customer": {
+    "name": "Bergsee Logistik GmbH",
+    "vat_number": null,
+    "address": "Hafenweg 21, 20457 Hamburg, Germany",
+    "country": "DE"
+  },
+  "line_items": [
+    {
+      "description": "Spare gear unit GU-40",
+      "quantity": "2",
+      "unit_price": "1250.00",
+      "vat_rate": "19",
+      "line_total": "2500.00"
+    },
+    {
+      "description": "Installation labour (hours)",
+      "quantity": "6",
+      "unit_price": "88.00",
+      "vat_rate": "19",
+      "line_total": "528.00"
+    },
+    {
+      "description": "Travel flat fee",
+      "quantity": "1",
+      "unit_price": "120.00",
+      "vat_rate": "19",
+      "line_total": "120.00"
+    }
+  ],
+  "net_total": "3148.00",
+  "vat_total": "598.12",
+  "gross_total": "3746.12",
+  "payment_terms": "14 days net"
+}

@@ -1,0 +1,40 @@
+{
+  "document_type": "receipt",
+  "number": "R-55812",
+  "issue_date": "2026-04-03",
+  "currency": "EUR",
+  "supplier": {
+    "name": "Halcyon Coworking S.r.l.",
+    "vat_number": "09876543217",
+    "address": "Via Fittizia 3, 20121 Milano (MI), Italia",
+    "country": "IT"
+  },
+  "customer": null,
+  "line_items": [
+    {
+      "description": "Day pass",
+      "quantity": "2",
+      "unit_price": "15.00",
+      "vat_rate": "22",
+      "line_total": "30.00"
+    },
+    {
+      "description": "Meeting room (1h)",
+      "quantity": "1",
+      "unit_price": "25.00",
+      "vat_rate": "22",
+      "line_total": "25.00"
+    },
+    {
+      "description": "Espresso",
+      "quantity": "3",
+      "unit_price": "1.20",
+      "vat_rate": "22",
+      "line_total": "3.60"
+    }
+  ],
+  "net_total": "58.60",
+  "vat_total": "12.89",
+  "gross_total": "71.49",
+  "payment_terms": "Paid by card"
+}

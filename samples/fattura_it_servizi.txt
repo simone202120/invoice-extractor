@@ -1,0 +1,22 @@
+RETE DIGITALE FITTIZIA S.R.L.
+Corso Vittorio Emanuele 101 - 10121 Torino (TO)
+P.IVA 05551234569
+
+FATTURA N. 31/2026                         Data: 28/01/2026
+
+Spett.le
+Panificio Aurora S.a.s.
+Via Garibaldi 8 - 37121 Verona (VR)
+P.IVA 03219876541
+
+Descrizione                          Q.tà   Prezzo unit.   Importo   IVA
+Sviluppo sito web vetrina               1       1.500,00   1.500,00   22%
+Hosting annuale                         1         180,00     180,00   22%
+Manutenzione mensile                    6          45,50     273,00   22%
+
+Imponibile                                                 1.953,00
+IVA 22%                                                      429,66
+TOTALE FATTURA                                         EUR 2.382,66
+
+Modalità di pagamento: bonifico bancario a 60 gg fine mese
+Documento di esempio: dati fittizi.

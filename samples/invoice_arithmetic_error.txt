@@ -1,0 +1,21 @@
+Tulip Lane Consulting B.V.
+Keizersgracht 999, 1015 AA Amsterdam, The Netherlands
+BTW / VAT: NL000000000B01
+
+INVOICE 2026-117
+Date: 2026-05-20
+
+Customer:
+Harbourlight Retail B.V.
+Stationsplein 1, 3511 AA Utrecht, The Netherlands
+
+Item                         Quantity    Rate        Total
+Data quality audit           3 days      EUR 450.00  EUR 1,400.00
+Findings report writing      8 hours     EUR  95.00  EUR   760.00
+
+Subtotal                                             EUR 2,160.00
+VAT 21%                                              EUR   453.60
+Amount due                                           EUR 2,613.60
+
+Please pay within 14 days.
+(Fictional sample document.)

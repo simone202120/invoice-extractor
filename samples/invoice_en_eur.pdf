@@ -1,0 +1,56 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 944 >>
+stream
+BT
+/F1 9 Tf
+11 TL
+40 800 Td
+(Kranich Maschinenbau GmbH) Tj T*
+(Industriestrasse 9, 70173 Stuttgart, Germany) Tj T*
+(VAT ID: DE000000000) Tj T*
+() Tj T*
+(INVOICE  No. KM-26-0419) Tj T*
+(Invoice date: 17.02.2026) Tj T*
+() Tj T*
+(Bill to: Bergsee Logistik GmbH, Hafenweg 21, 20457 Hamburg, Germany) Tj T*
+() Tj T*
+(Pos  Description                    Qty    Unit price      Net amount) Tj T*
+(1    Spare gear unit GU-40            2      1,250.00        2,500.00) Tj T*
+(2    Installation labour \(hours\)      6         88.00          528.00) Tj T*
+(3    Travel flat fee                  1        120.00          120.00) Tj T*
+() Tj T*
+(Net total                                                  3,148.00) Tj T*
+(VAT 19%                                                      598.12) Tj T*
+(Total amount EUR                                           3,746.12) Tj T*
+() Tj T*
+(Payment terms: 14 days net.) Tj T*
+(Fictional sample document.) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001236 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R /Info << /Producer (invoice-extractor samples) >> >>
+startxref
+1331
+%%EOF
