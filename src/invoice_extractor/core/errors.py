@@ -23,3 +23,7 @@ class UnsupportedDocumentError(DocumentError):
 
 class ExtractionError(InvoiceExtractorError):
     """The LLM never produced output that parses as an invoice."""
+
+
+class ConfigurationError(InvoiceExtractorError):
+    """A required setting (such as the LLM API key) is missing."""
