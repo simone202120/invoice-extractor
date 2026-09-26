@@ -19,9 +19,12 @@ PDF_MAGIC = b"%PDF-"
 TEXT_SUFFIXES = {".txt", ".text", ".md", ""}
 
 
-def _pdf_to_text(content: bytes) -> str:
+def _pdf_to_text(content: bytes, max_pages: int) -> str:
     try:
         reader = PdfReader(io.BytesIO(content))
+        # Checked before extraction: text extraction is the expensive part on hostile PDFs.
+        if len(reader.pages) > max_pages:
+            raise DocumentTooLargeError(f"the PDF has more than {max_pages} pages")
         pages = [page.extract_text() for page in reader.pages]
     except (PyPdfError, ValueError, KeyError) as exc:
         logger.warning("Unreadable PDF: %s", exc)
@@ -39,12 +42,14 @@ def _bytes_to_text(content: bytes) -> str:
         raise UnsupportedDocumentError("text files must be UTF-8 encoded") from exc
 
 
-def load_document(content: bytes, filename: str, *, max_bytes: int, max_chars: int) -> str:
+def load_document(
+    content: bytes, filename: str, *, max_bytes: int, max_chars: int, max_pages: int
+) -> str:
     """Return the document text; PDFs are recognised by their header, not their extension."""
     if len(content) > max_bytes:
         raise DocumentTooLargeError(f"file is larger than {max_bytes} bytes")
     if content.startswith(PDF_MAGIC):
-        text = _pdf_to_text(content)
+        text = _pdf_to_text(content, max_pages)
     elif PurePath(filename).suffix.lower() in TEXT_SUFFIXES:
         text = _bytes_to_text(content).strip()
     else:

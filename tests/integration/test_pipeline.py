@@ -23,6 +23,7 @@ def _load(path: Path) -> str:
         path.name,
         max_bytes=settings.max_upload_bytes,
         max_chars=settings.max_text_chars,
+        max_pages=settings.max_pdf_pages,
     )
 
 

@@ -12,7 +12,7 @@ from invoice_extractor.core.errors import (
 from invoice_extractor.core.loader import load_document
 
 SAMPLES = Path(__file__).parents[2] / "samples"
-LIMITS = {"max_bytes": 1_000_000, "max_chars": 20_000}
+LIMITS = {"max_bytes": 1_000_000, "max_chars": 20_000, "max_pages": 50}
 
 
 def test_pdf_text_is_extracted() -> None:
@@ -44,12 +44,12 @@ def test_empty_document_is_rejected(content: bytes) -> None:
 
 def test_oversized_file_is_rejected() -> None:
     with pytest.raises(DocumentTooLargeError):
-        load_document(b"x" * 11, "a.txt", max_bytes=10, max_chars=100)
+        load_document(b"x" * 11, "a.txt", max_bytes=10, max_chars=100, max_pages=1)
 
 
 def test_too_much_text_is_rejected() -> None:
     with pytest.raises(DocumentTooLargeError):
-        load_document(b"x" * 101, "a.txt", max_bytes=1000, max_chars=100)
+        load_document(b"x" * 101, "a.txt", max_bytes=1000, max_chars=100, max_pages=1)
 
 
 def test_unsupported_extension_is_rejected() -> None:
@@ -74,3 +74,13 @@ def test_pdf_without_text_is_rejected_as_empty() -> None:
     writer.write(buffer)
     with pytest.raises(EmptyDocumentError, match="OCR"):
         load_document(buffer.getvalue(), "scan.pdf", **LIMITS)
+
+
+def test_pdf_with_too_many_pages_is_rejected_before_extraction() -> None:
+    writer = PdfWriter()
+    for _ in range(3):
+        writer.add_blank_page(width=595, height=842)
+    buffer = io.BytesIO()
+    writer.write(buffer)
+    with pytest.raises(DocumentTooLargeError, match="pages"):
+        load_document(buffer.getvalue(), "a.pdf", max_bytes=1_000_000, max_chars=100, max_pages=2)
