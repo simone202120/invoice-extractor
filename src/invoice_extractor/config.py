@@ -20,7 +20,13 @@ class Settings(BaseSettings):
     max_retries: int = Field(default=2, ge=0)
     max_upload_mb: int = 10
     max_text_chars: int = 50_000
+    max_batch_files: int = Field(default=20, ge=1)
+    batch_concurrency: int = Field(default=4, ge=1)
     llm_timeout_seconds: float = 60
+
+    @property
+    def max_upload_bytes(self) -> int:
+        return self.max_upload_mb * 1024 * 1024
 
     @property
     def tracing_enabled(self) -> bool:

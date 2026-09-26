@@ -35,3 +35,21 @@ def tracing_config(settings: Settings, document_name: str) -> RunnableConfig:
     if settings.tracing_enabled:
         config["callbacks"] = [CallbackHandler(public_key=settings.langfuse_public_key)]
     return config
+
+
+def trace_url(settings: Settings, config: RunnableConfig) -> str | None:
+    """Langfuse UI link of the trace recorded with `config`, when tracing is enabled."""
+    callbacks = config.get("callbacks")
+    if not isinstance(callbacks, list):
+        return None
+    handlers = [cb for cb in callbacks if isinstance(cb, CallbackHandler)]
+    if not handlers or handlers[0].last_trace_id is None:
+        return None
+    try:
+        return get_client(public_key=settings.langfuse_public_key).get_trace_url(
+            trace_id=handlers[0].last_trace_id
+        )
+    except Exception:
+        # The link is a convenience: a Langfuse outage must not fail an extraction that succeeded.
+        logger.warning("Could not build the Langfuse trace URL", exc_info=True)
+        return None

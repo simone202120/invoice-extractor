@@ -86,3 +86,32 @@ async def test_one_trace_with_a_named_run_per_attempt() -> None:
     assert handler.names[0] == "extract_invoice"
     assert "attempt_0" in handler.names
     assert "attempt_1" in handler.names
+
+
+def _with_usage(message: AIMessage, tokens_in: int, tokens_out: int, cost: float) -> AIMessage:
+    message.usage_metadata = {
+        "input_tokens": tokens_in,
+        "output_tokens": tokens_out,
+        "total_tokens": tokens_in + tokens_out,
+    }
+    message.response_metadata = {"token_usage": {"cost": cost}}
+    return message
+
+
+async def test_usage_is_summed_across_attempts() -> None:
+    good = expected_invoice("invoice_en_clean")
+    extractor, _ = fake_extractor(
+        _with_usage(invoice_call(_with_wrong_gross(good)), 100, 20, 0.001),
+        _with_usage(invoice_call(good), 150, 25, 0.002),
+    )
+    result = await extract_invoice("doc", extractor, max_retries=2)
+    assert result.usage.input_tokens == 250
+    assert result.usage.output_tokens == 45
+    assert result.usage.cost_usd == pytest.approx(0.003)
+    assert result.usage.latency_ms >= 0
+
+
+async def test_cost_is_unknown_when_provider_does_not_report_it() -> None:
+    extractor, _ = fake_extractor(invoice_call(expected_invoice("invoice_en_clean")))
+    result = await extract_invoice("doc", extractor, max_retries=0)
+    assert result.usage.cost_usd is None
