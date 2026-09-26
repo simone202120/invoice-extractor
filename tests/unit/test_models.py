@@ -71,3 +71,9 @@ def test_invoice_rejects_invalid_currency() -> None:
 def test_invoice_money_schema_is_plain_number() -> None:
     schema = Invoice.model_json_schema()
     assert schema["properties"]["net_total"]["type"] == "number"
+
+
+def test_invoice_rejects_oversized_llm_output() -> None:
+    payload = _invoice_payload() | {"number": "x" * 101}
+    with pytest.raises(ValidationError):
+        Invoice.model_validate(payload)

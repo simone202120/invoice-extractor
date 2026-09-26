@@ -56,6 +56,7 @@ async def test_sample_accuracy() -> None:
             path.name,
             max_bytes=settings.max_upload_bytes,
             max_chars=settings.max_text_chars,
+            max_pages=settings.max_pdf_pages,
         )
         result = await extract_invoice(
             text,

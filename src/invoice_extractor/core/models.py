@@ -37,6 +37,10 @@ def _upper(value: object) -> object:
     return value.strip().upper() if isinstance(value, str) else value
 
 
+# Upper bounds on model output, independent of the document size limit.
+ShortText = Annotated[str, Field(max_length=100)]
+LongText = Annotated[str, Field(max_length=500)]
+
 # The LLM sees money as a plain number; strings with decimal commas are still accepted on input.
 Money = Annotated[Decimal, BeforeValidator(parse_decimal), WithJsonSchema({"type": "number"})]
 
@@ -47,19 +51,19 @@ class DocumentType(StrEnum):
 
 
 class Party(BaseModel):
-    name: str = Field(description="Legal or trading name as printed on the document.")
-    vat_number: str | None = Field(
+    name: LongText = Field(description="Legal or trading name as printed on the document.")
+    vat_number: ShortText | None = Field(
         default=None, description="VAT / tax id exactly as printed, without the label."
     )
-    address: str | None = Field(default=None, description="Full address on one line.")
-    country: str | None = Field(
+    address: LongText | None = Field(default=None, description="Full address on one line.")
+    country: ShortText | None = Field(
         default=None,
         description="ISO 3166-1 alpha-2 country code of the party (e.g. IT, GB), if determinable.",
     )
 
 
 class LineItem(BaseModel):
-    description: str
+    description: LongText
     quantity: Money = Field(default=Decimal(1), description="Quantity; 1 when not printed.")
     unit_price: Money = Field(description="Unit price excluding VAT.")
     vat_rate: Money = Field(description="VAT rate in percent, e.g. 22 for 22%.")
@@ -68,18 +72,18 @@ class LineItem(BaseModel):
 
 class Invoice(BaseModel):
     document_type: DocumentType
-    number: str = Field(description="Invoice or receipt number as printed.")
+    number: ShortText = Field(description="Invoice or receipt number as printed.")
     issue_date: date = Field(description="Issue date in ISO format YYYY-MM-DD.")
     currency: Annotated[str, BeforeValidator(_upper)] = Field(
         pattern=r"^[A-Z]{3}$", description="ISO 4217 code, e.g. EUR."
     )
     supplier: Party
     customer: Party | None = None
-    line_items: list[LineItem]
+    line_items: list[LineItem] = Field(max_length=500)
     net_total: Money = Field(description="Total excluding VAT.")
     vat_total: Money = Field(description="Total VAT amount.")
     gross_total: Money = Field(description="Total amount due including VAT.")
-    payment_terms: str | None = None
+    payment_terms: LongText | None = None
 
 
 class ValidationReport(BaseModel):
