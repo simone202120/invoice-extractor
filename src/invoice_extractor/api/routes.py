@@ -4,7 +4,7 @@ import asyncio
 import logging
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import ValidationError
 from starlette.datastructures import UploadFile as FormFile
 
@@ -22,21 +22,42 @@ router = APIRouter()
 SettingsDep = Annotated[Settings, Depends(get_settings)]
 ExtractorDep = Annotated[Extractor, Depends(get_extractor)]
 
+# Bodies are parsed by hand (after the size guard), so their OpenAPI schema is declared here.
+FILE_SCHEMA = {"type": "string", "format": "binary"}
 EXTRACT_BODY: dict[str, Any] = {
+    "requestBody": {
+        "required": True,
+        "content": {
+            "multipart/form-data": {
+                "schema": {"type": "object", "properties": {"file": FILE_SCHEMA}}
+            },
+            "application/json": {"schema": TextRequest.model_json_schema()},
+        },
+    }
+}
+BATCH_BODY: dict[str, Any] = {
     "requestBody": {
         "required": True,
         "content": {
             "multipart/form-data": {
                 "schema": {
                     "type": "object",
-                    "properties": {"file": {"type": "string", "format": "binary"}},
-                    "required": ["file"],
+                    "properties": {"files": {"type": "array", "items": FILE_SCHEMA}},
                 }
-            },
-            "application/json": {"schema": TextRequest.model_json_schema()},
+            }
         },
     }
 }
+MULTIPART_OVERHEAD = 64 * 1024
+
+
+def _check_content_length(request: Request, max_bytes: int) -> None:
+    """Reject oversized bodies from the header, before Starlette buffers them to memory or disk."""
+    length = request.headers.get("content-length")
+    if length is None:
+        raise HTTPException(status.HTTP_411_LENGTH_REQUIRED, "Content-Length header is required")
+    if not length.isdigit() or int(length) > max_bytes + MULTIPART_OVERHEAD:
+        raise HTTPException(status.HTTP_413_CONTENT_TOO_LARGE, f"body exceeds {max_bytes} bytes")
 
 
 async def _process(
@@ -56,11 +77,12 @@ async def _process(
 
 
 async def _read_upload(upload: FormFile, settings: Settings) -> bytes:
-    # Read one byte past the limit so the loader can reject oversized files without reading them.
+    # One byte past the limit is enough for the loader to reject a file that is too large.
     return await upload.read(settings.max_upload_bytes + 1)
 
 
 async def _read_single_input(request: Request, settings: Settings) -> tuple[str, bytes]:
+    _check_content_length(request, settings.max_upload_bytes)
     content_type = request.headers.get("content-type", "")
     if content_type.startswith("multipart/form-data"):
         form = await request.form()
@@ -93,17 +115,24 @@ async def extract(
     return await _process(filename, content, settings, extractor)
 
 
-@router.post("/extract/batch")
+@router.post("/extract/batch", openapi_extra=BATCH_BODY)
 async def extract_batch(
-    files: Annotated[list[UploadFile], File()], settings: SettingsDep, extractor: ExtractorDep
+    request: Request, settings: SettingsDep, extractor: ExtractorDep
 ) -> list[BatchItem]:
+    _check_content_length(request, settings.max_batch_files * settings.max_upload_bytes)
+    if not request.headers.get("content-type", "").startswith("multipart/form-data"):
+        raise HTTPException(status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, "send multipart/form-data")
+    form = await request.form(max_files=settings.max_batch_files + 1)
+    files = [item for item in form.getlist("files") if isinstance(item, FormFile)]
+    if not files:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "missing 'files' field")
     if len(files) > settings.max_batch_files:
         raise HTTPException(
             status.HTTP_413_CONTENT_TOO_LARGE, f"at most {settings.max_batch_files} files"
         )
     limit = asyncio.Semaphore(settings.batch_concurrency)
 
-    async def run(upload: UploadFile) -> BatchItem:
+    async def run(upload: FormFile) -> BatchItem:
         filename = upload.filename or "upload"
         async with limit:
             try:

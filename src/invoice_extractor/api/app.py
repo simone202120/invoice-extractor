@@ -40,7 +40,10 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 
 async def domain_error(_: Request, exc: Exception) -> JSONResponse:
-    code = ERROR_STATUS.get(type(exc), status.HTTP_400_BAD_REQUEST)
+    code = next(
+        (ERROR_STATUS[cls] for cls in type(exc).__mro__ if cls in ERROR_STATUS),
+        status.HTTP_400_BAD_REQUEST,
+    )
     if code >= 500:
         logger.error("Service misconfigured: %s", exc)
     return JSONResponse(status_code=code, content={"detail": str(exc)})
@@ -55,7 +58,6 @@ async def llm_error(_: Request, exc: Exception) -> JSONResponse:
 
 
 def create_app() -> FastAPI:
-    logging.basicConfig(level=logging.INFO)
     app = FastAPI(title="invoice-extractor", version="0.1.0", lifespan=lifespan)
     app.add_exception_handler(InvoiceExtractorError, domain_error)
     app.add_exception_handler(openai.APIError, llm_error)
@@ -63,4 +65,5 @@ def create_app() -> FastAPI:
     return app
 
 
+logging.basicConfig(level=logging.INFO)
 app = create_app()

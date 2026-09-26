@@ -1,17 +1,23 @@
 import asyncio
+from collections.abc import Iterator
 from typing import Any
 
 import httpx
 import openai
 import pytest
+from fastapi import Request
 from fastapi.testclient import TestClient
 from langchain_core.messages import AIMessage
 from langchain_core.runnables import Runnable, RunnableLambda
 
-from invoice_extractor.api.app import create_app
+from invoice_extractor.api.app import create_app, domain_error
 from invoice_extractor.api.dependencies import get_extractor
 from invoice_extractor.config import Settings, get_settings
-from invoice_extractor.core.errors import ConfigurationError
+from invoice_extractor.core.errors import (
+    ConfigurationError,
+    DocumentTooLargeError,
+    ExtractionError,
+)
 from invoice_extractor.core.models import Invoice
 from tests.fakes import SAMPLES, expected_invoice, fake_extractor, invoice_call
 
@@ -171,3 +177,58 @@ def test_lifespan_runs_without_tracing_keys(monkeypatch: pytest.MonkeyPatch) -> 
             assert client.get("/health").status_code == 200
     finally:
         get_settings.cache_clear()
+
+
+def test_oversized_body_is_rejected_from_content_length(client: TestClient) -> None:
+    response = client.post(
+        "/extract",
+        content=b"{}",
+        headers={"content-type": "application/json", "content-length": str(10**9)},
+    )
+    assert response.status_code == 413
+
+
+def test_oversized_batch_is_rejected_from_content_length(client: TestClient) -> None:
+    response = client.post(
+        "/extract/batch",
+        content=b"x",
+        headers={"content-type": "multipart/form-data; boundary=x", "content-length": str(10**9)},
+    )
+    assert response.status_code == 413
+
+
+def test_missing_content_length_is_411(client: TestClient) -> None:
+    def chunks() -> Iterator[bytes]:
+        yield b'{"text": "hi"}'
+
+    response = client.post(
+        "/extract", content=chunks(), headers={"content-type": "application/json"}
+    )
+    assert response.status_code == 411
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "code"),
+    [({"files": [("other", _txt())]}, 422), ({"json": {"text": "x"}}, 415)],
+)
+def test_invalid_batch_input_is_rejected(
+    client: TestClient, kwargs: dict[str, Any], code: int
+) -> None:
+    assert client.post("/extract/batch", **kwargs).status_code == code
+
+
+class _MoreSpecificExtractionError(ExtractionError):
+    pass
+
+
+class _TooManyPagesError(DocumentTooLargeError):
+    pass
+
+
+@pytest.mark.parametrize(
+    ("error", "code"),
+    [(_MoreSpecificExtractionError("x"), 422), (_TooManyPagesError("x"), 413)],
+)
+async def test_domain_error_subclasses_map_like_their_parent(error: Exception, code: int) -> None:
+    request = Request({"type": "http"})
+    assert (await domain_error(request, error)).status_code == code
