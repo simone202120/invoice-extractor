@@ -1,5 +1,6 @@
 """Single-document page: upload or pick a sample, then show the extracted invoice."""
 
+import hashlib
 from typing import Any
 
 import streamlit as st
@@ -51,10 +52,11 @@ def render(settings: Settings) -> None:
     chosen = (upload.name, upload.getvalue()) if upload else None
     if example := _examples(settings):
         chosen = example
-    if chosen and chosen[0] != st.session_state.get("single_name"):
+    # Streamlit reruns the script on every interaction: only call the API for a new document.
+    digest = chosen and hashlib.sha256(chosen[1]).hexdigest()
+    if chosen and digest != st.session_state.get("single_digest"):
         name, content = chosen
         result = call_api(f"Extracting {name}", client.extract_file, settings, name, content)
-        st.session_state["single_name"] = name
-        st.session_state["single_result"] = result
+        st.session_state.update(single_name=name, single_digest=digest, single_result=result)
     if result := st.session_state.get("single_result"):
         _show(result)
