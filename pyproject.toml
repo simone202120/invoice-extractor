@@ -6,7 +6,10 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12"
 dependencies = [
+    "langchain>=1",
     "langchain-core>=0.3",
+    "langchain-openai>=0.3",
+    "langfuse>=3",
     "pydantic>=2.10",
     "pydantic-settings>=2.6",
     "pypdf>=5",
@@ -68,3 +71,7 @@ min_confidence = 80
 
 [tool.deptry]
 known_first_party = ["invoice_extractor"]
+
+[tool.deptry.per_rule_ignores]
+# Imported at runtime by langfuse.langchain, never directly by our code.
+DEP002 = ["langchain"]
